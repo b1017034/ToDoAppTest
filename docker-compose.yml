@@ -14,13 +14,14 @@ services:
         source: ./frontend
         target: /usr/src/app
     ports:
-      - "8000:3000"
+      - "3000:3000"
 
   backend:
-    container_name: backend
     build:
       context: ./backend
       dockerfile: Dockerfile
+      args:
+        - ORG=${ORG}
     ports:
       - "8080:8080"
     depends_on:
@@ -29,9 +30,11 @@ services:
       - type: bind
         source: ./backend
         target: /go/src
+      - type: bind
+        source: ${HOME}/.ssh
+        target: /root/.ssh
 
   database:
-    container_name: database
     build:
       context: ./database
       dockerfile: Dockerfile
